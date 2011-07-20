@@ -1,5 +1,10 @@
 \name{rsrPrincomp}
 \alias{rsrPrincomp}
+\alias{print.rsrPrincomp}
+\alias{summary.rsrPrincomp}
+\alias{plot.rsrPrincomp}
+\alias{scores.rsrPrincomp}
+\alias{loadings.rsrPrincomp}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Principal Component Analysis for xdf object

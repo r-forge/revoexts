@@ -1,5 +1,10 @@
 \name{rsrFactanal}
 \alias{rsrFactanal}
+\alias{print.rsrFactanal}
+\alias{summary.rsrFactanal}
+\alias{plot.rsrFactanal}
+\alias{scores.rsrFactanal}
+\alias{loadings.rsrFactanal}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Factor analysis for xdf object
