@@ -1,15 +1,15 @@
 # FA fit for rxCovCor object
-factanal.rxCovCor <- function( CovCorMat, factors = 2, start = NULL, 
+factanal.rxCovCor <- function( x, factors = 2, start = NULL, 
                                rotation = "varimax", control = NULL, ... )
 { 
     # check to see if the rxCovCor object is a covariance or correlation
-    if( !inherits( CovCorMat, "rxCovCor" ) ){
-        stop( "'CovCorMat' must be of class 'rxCovCor'" )
+    if( !inherits( x, "rxCovCor" ) ){
+        stop( "'x' must be of class 'rxCovCor'" )
     }
 
-    n.obs <- CovCorMat$valid.obs
+    n.obs <- x$valid.obs
     fit   <- factanal(  scores   = "none", 
-                        covmat   = CovCorMat$CovCor, 
+                        covmat   = x$CovCor, 
                         n.obs    = n.obs,
                         factors  = factors, 
                         start    = start, 
@@ -46,10 +46,10 @@ rsrFactanal <- function( formula,
     if( reportProgress > 0 ){
         cat( "Fitting the model:\n" )
     }
-    res    <- factanal.rxCovCor( CovCorMat      = CovMat, 
-                                 factors        = factors ,
-                                 start          = start, 
-                                 rotation       = rotation,
+    res    <- factanal.rxCovCor( x        = CovMat, 
+                                 factors  = factors ,
+                                 start    = start, 
+                                 rotation = rotation,
                                  ... )
     if( scores != "none" ){
         if( reportProgress > 0 ){
@@ -108,6 +108,8 @@ loadings.rsrFactanal<- function( x ){
     }
 }
 # plot 
+scoreplot <- function (x, ...) {UseMethod( "scoreplot", x )}
+
 scoreplot.rsrFactanal   <- 
 function( x, choices = 1L:2L, label = NULL, label.nm, alpha = 1,
           numBreaksX = 100, numBreaksY = 100,
@@ -162,16 +164,14 @@ function( x, choices = 1L:2L, label = NULL, label.nm, alpha = 1,
     }
     invisible( df.scores )
 }
-
-
-rsrPlotFactors<-function( x, factorName, main="Factor Score", xlab = "Index", ... ){
+rsrFactorPlot<-function( x, factorName = "Factor1", ... ){
     if( inherits( x, "rsrFactanal" ) ){
         if( is.null( x$scores ) ){
             stpt("Factor score is not calculated.")
         }
         idx <- 1:x$fit$n.obs
         rxLinePlot( formula( paste( factorName, " ~ idx" ) ), 
-                    x$scores, xlab = xlab, main = main, ... )
+                    x$scores, ... )
     } else {
         stop( "only works on rsrFactanal object" )
     }

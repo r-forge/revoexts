@@ -1,24 +1,24 @@
 
 # PCA fit for rxCovCor object
-princomp.rxCovCor <- function( CovCorMat, ... ){
+princomp.rxCovCor <- function( x, ... ){
     # check to see if the rxCovCor object is a covariance or correlation
-    if( !inherits( CovCorMat, "rxCovCor" ) ){
-        princomp( CovCorMat )
+    if( !inherits( x, "rxCovCor" ) ){
+        princomp( x )
     } else {
-        if( CovCorMat$params$Type == "cov" ){
+        if( x$params$Type == "cov" ){
             corFlag <- FALSE
-        } else if ( CovCorMat$params$Type == "cor" ){
+        } else if ( x$params$Type == "cor" ){
             corFlag <- TRUE
         } else {
-            stop( gettextf( "CovCorMat must be rxCovCor matrix with type cov or cor" ) )
+            stop( gettextf( "x must be rxCovCor matrix with type cov or cor" ) )
         }
         fit <- princomp( cor    = corFlag, 
                          scores = FALSE, 
-                         covmat = list( cov    = CovCorMat$CovCor, 
-                                        n.obs  = CovCorMat$valid.obs, 
-                                        center = CovCorMat$Means ), 
+                         covmat = list( cov    = x$CovCor, 
+                                        n.obs  = x$valid.obs, 
+                                        center = x$Means ), 
                          subset = subset, ... )
-        fit$center   <- CovCorMat$Means
+        fit$center   <- x$Means
         res          <- list( "fit"    = fit, 
                               "scores" = NULL )
         class( res ) <- "rsrPrincomp"
@@ -37,11 +37,20 @@ rsrPrincomp <- function( formula,
                         reportProgress = rxGetOption( "reportProgress" ),
                         ... )
 {
+    if( reportProgress > 0 ){
+        cat( "Calculating Covariance Matrix:\n" )
+    }
     CovMat <- rxCovCor( formula = formula, data = inFile,   
                         blocksPerRead  = blocksPerRead,
                         reportProgress = reportProgress )
-    res    <- princomp.rxCovCor( CovCorMat = CovMat, ... )
+    if( reportProgress > 0 ){
+        cat( "Fitting the model:\n" )
+    }
+    res    <- princomp.rxCovCor( x = CovMat, ... )
     if( score == TRUE ){
+        if( reportProgress > 0 ){
+            cat( "Calculating Scores:\n" )
+        }
         if( is.null( outFile ) ) { 
             outFile <- inFile
             append  <- TRUE
@@ -76,16 +85,14 @@ summary.rsrPrincomp <- function( x ){
         summary( x )
     }
 }
-scores <- function (x, ...)  {
-  if( is.null( attr( x, "class" ) ) ){
-    return( x )
-  }
-  else  UseMethod( "scores", x ) # x is object
+scores <- function (x, ...){ 
+    UseMethod( "scores", x ) # x is object
 }
-# Step 3
+
+# default method
 scores.default <- function( x ){
-    if(!is.null(x$scores)){
-        return(x$scores)
+    if( !is.null( x$scores ) ){
+        return( x$scores )
     } else {
         return( x )
     }
@@ -99,13 +106,9 @@ scores.rsrPrincomp  <- function( x ){
     }
 }
 
-loadings <- function (x, ...)  {
-  if( is.null( attr( x, "class" ) ) ){
-    return( x )
-  }
-  else  UseMethod( "loadings", x ) # x is object
-}
 # loadings
+loadings <- function (x, ...) {UseMethod( "loadings", x )}
+
 loadings.rsrPrincomp<- function( x ){
     if( inherits( x, "rsrPrincomp" ) ){
         x$fit$loadings
@@ -114,14 +117,17 @@ loadings.rsrPrincomp<- function( x ){
     }
 }
 
-rsrPlotScores<-function( x, componentName,xlab= "Index", main="Principal Component Score", ... ){
+rsrComponentPlot<-function( x, componentName = "Comp.1", ... ){ #,,... ){
     if( inherits( x, "rsrPrincomp" ) ){
         if( is.null( x$scores ) ){
             stpt("Principal Component score is not calculated.")
         }
+        possibleNames <- rxGetVarNames( x$scores )
+        if( !all( componentName %in% possibleNames ) ){
+            stop( "x does not have component with specified name" )
+        }
         idx <- 1:x$fit$n.obs
-        rxLinePlot( formula( paste( componentName, " ~ idx" ) ), x$scores, 
-             xlab = xlab, main = main, ... )
+        rxLinePlot( formula( paste( componentName, " ~ idx" ) ), x$scores, ... )
     } else {
         stop( "only works on rsrPrincomp object" )
     }
@@ -172,14 +178,14 @@ biplot.rsrPrincomp    <- function( x, choices = 1L:2L, label = NULL, label.nm = 
         rangy1 <- unsigned.range( l.sc.scaled[, 1L] )
         rangy2 <- unsigned.range( l.sc.scaled[, 2L] )
     
-       # if( missing( xlim ) && missing( ylim ) ){
-       #     xlim <- rangx1 
-       #     ylim <- rangx2 #<- range( rangx1, rangx2 )
-       # } else if( missing( xlim ) ){ 
-       #     xlim <- rangx1
-       # } else if( missing( ylim ) ){ 
-       #     ylim <- rangx2
-       # }
+        if( missing( xlim ) && missing( ylim ) ){
+            xlim <- rangx1 
+            ylim <- rangx2 #<- range( rangx1, rangx2 )
+        } else if( missing( xlim ) ){ 
+            xlim <- rangx1
+        } else if( missing( ylim ) ){ 
+            ylim <- rangx2
+        }
         ratio <- max( rangy1 / rangx1, rangy2 / rangx2 ) / expand
         if( missing( xlab ) ){
             xlab = choice.nm[1]
@@ -192,15 +198,15 @@ biplot.rsrPrincomp    <- function( x, choices = 1L:2L, label = NULL, label.nm = 
                                 xlab = xlab, ylab = ylab,
                                 xlim = xlim, ylim = ylim, ... )
         cat("Plotting lines \n")
-        #par( new = TRUE )
-        #plot( l.sc.scaled, axes = FALSE, type = "n", 
-        #        xlim = xlim * ratio, ylim = ylim * ratio,
-        #        xlab = "", ylab = "", ... )
-        #axis( 3, ... )
-        #axis( 4, ... )
-        #arrows( 0, 0, l.sc.scaled[,1] * 0.8, l.sc.scaled[,2] * 0.8, 
-        #        length = arrow.len )
-        #text( l.sc.scaled, labels = dimnames( l.sc.scaled )[[1]] )
+        par( new = TRUE )
+        plot( l.sc.scaled, axes = FALSE, type = "n", 
+                xlim = xlim * ratio, ylim = ylim * ratio,
+                xlab = "", ylab = "", ... )
+        axis( 3, ... )
+        axis( 4, ... )
+        arrows( 0, 0, l.sc.scaled[,1] * 0.8, l.sc.scaled[,2] * 0.8, 
+                length = arrow.len )
+        text( l.sc.scaled, labels = dimnames( l.sc.scaled )[[1]] )
     } else {
         biplot( x )
     }
@@ -224,7 +230,7 @@ predict.rsrPrincomp <- function( object,
             outFile = newdata
             append  = TRUE 
         }
-        rsrPrincompPredictXdf(   object$fit, 
+        rsrPrincompPredictXdf(  object$fit, 
                                 inFile    = newdata, 
                                 outFile   = outFile, 
                                 append    = append,
@@ -311,52 +317,4 @@ function( princomp,                  # an object of class princomp
                    computeLowHigh = computeLowHigh,
                    blocksPerRead  = blocksPerRead,
                    reportProgress = reportProgress ) )
-}
-
-rsrLoadingPlot<- function( loading, main = "Loading matrix", rangex, rangey, xbin, ybin, 
-                        zrange=c( -1, 1 ), zbin = 11, digits=2, cex.col=0.7, cex.var=0.5,
-                        xlabels = NULL, ylabels = NULL, color = rev( brewer.pal( zbin, "RdBu" ) )
-                        ){
-                            
-    z.breaks = seq( zrange[1], zrange[2], length.out = zbin + 1 )
-    z = array( as.double( cut( loading, breaks = z.breaks, labels = 1:zbin ) ), dim( loading ) )
-    d = dim( loading )
-    y <- 1:( d[1] + 1 )
-    x <- 1:( d[2] + 1 )
-    if( length( color ) < zbin ){ stop("color must be same length as zbin") }
-    pal <- color
-    layout( matrix( c( 2, 1 ), 1, 2, byrow = FALSE ), c( 10.5, 1.5 ) )
-    par( mar = c( 0.5, 0.1, 2, 0.1 ), pty = "m" )
-    plot( c( 0, 1 ), c( min( z.breaks ), max( z.breaks ) ), type = "n",
-        bty = "n", xlab = "", ylab = "", xaxt = "n", yaxt = "n" )
-    for( i in 2:( length( z.breaks ) ) ) {
-        rect( xleft = 0.5, ybottom = z.breaks[i - 1], 
-              xright = 1, ytop = z.breaks[i], col = pal[i - 1] )
-        text( x = 0.45, y = z.breaks[i - 1], 
-              labels = format(round(z.breaks[i - 1], digits)), 
-              cex = cex.col, adj = 1, xpd = TRUE)
-    }
-    rect( xleft = 0.5, ybottom = z.breaks[length( z.breaks )], 
-          xright = 1, ytop = z.breaks[length( z.breaks )], col = pal[length( pal )])
-    text( x = 0.45, y = z.breaks[length( z.breaks )], 
-          labels = format(round(z.breaks[length( z.breaks )], digits ) ), 
-          cex = cex.col, adj = 1, xpd = TRUE )
-    par( mar=c( 1, 4, 4, 1 ) )
-    plot( range( x ),range( y ), axes = FALSE, type = "n",
-          xlim = range( x ), ylim = range( y ),
-          xaxs = "i", yaxs = "i", xlab = "", ylab = "" )
-    for(i in 1:d[2]){
-        for(j in d[1]:1){
-            rect( x[i], y[j], x[i+1], y[j+1], col = pal[z[j,i]], 
-                  border = pal[z[j,i]] )
-        }
-}
-    if( is.null( xlabels ) ){ xlabels <- 1:d[2] }
-    if( is.null( ylabels ) ){ ylabels <- 1:d[1] }
-    axis( 2, at = ( ( 1:d[1] ) + 0.5 ), labels = rev( ylabels ), 
-             las = 2, tick = FALSE, line = -1 )
-    axis( 3, at = ( ( 1:d[2] )+ 0.5 ), labels = xlabels ,
-             las = 3, tick = FALSE, line = -1 )
-    title( main = main )
-    invisible( z )
 }
