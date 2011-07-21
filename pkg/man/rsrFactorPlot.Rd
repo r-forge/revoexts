@@ -48,6 +48,29 @@ Masanao Yajima \email{yajima@stat.ucla.edu}
     \code{\link[stats]{rsrComponentPlot}}
 }
 \examples{
+# Example
+v1 <- c(1,1,1,1,1,1,1,1,1,1,3,3,3,3,3,4,5,6) 
+v2 <- c(1,2,1,1,1,1,2,1,2,1,3,4,3,3,3,4,6,5) 
+v3 <- c(3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,5,4,6) 
+v4 <- c(3,3,4,3,3,1,1,2,1,1,1,1,2,1,1,5,6,4) 
+v5 <- c(1,1,1,1,1,3,3,3,3,3,1,1,1,1,1,6,4,5) 
+v6 <- c(1,1,1,2,1,3,3,3,4,3,1,1,1,2,1,6,5,4) 
+
+dataset <- data.frame( cbind( v1, v2, v3, v4, v5, v6 ) )
+form   <- ~ v1 + v2 + v3 + v4 +v5 +v6
+
+# XDF file names 
+inFile  <- "inData.xdf"
+outFile <- "outData.xdf"
+
+# dataset
+rxDataFrameToXdf( dataset,  inFile, overwrite = TRUE )
+
+# Principal Component Analsys ( stats::princomp )
+fa.fit  <- rsrFactanal( form, inFile = inFile, outFile = outFile, 
+                        factors = 2, overwrite = TRUE, scores = "regression" )
+rsrFactorPlot( fa.fit, factorName = "Factor1", type = "p" )
+                        
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

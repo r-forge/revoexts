@@ -48,6 +48,21 @@ Masanao Yajima \email{yajima@stat.ucla.edu}
     \code{\link[stats]{rsrFactorPlot}}
 }
 \examples{
+# XDF
+inFile  <- "inData.xdf"
+outFile <- "outData.xdf"
+
+# dataset
+dataset <- iris[ ,1:4]
+form    <- ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width
+
+# conver the dataset to xdf file
+rxDataFrameToXdf( dataset, inFile, overwrite = TRUE )
+
+# Fitting Principal Component Analsys Model using stats::princomp
+pc.fit <- rsrPrincomp( form, inFile = inFile, outFile=outFile, score = TRUE, overwrite = TRUE )
+
+rsrComponentPlot( pc.fit, componentName = "Comp.1", type = "p" )
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

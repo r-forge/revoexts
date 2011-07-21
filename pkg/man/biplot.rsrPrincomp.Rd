@@ -2,10 +2,10 @@
 \alias{biplot.rsrPrincomp}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+Binned biplot for rsrPrincomp object
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+biplot for rsrPrincomp object.  Since the data may be massive, the data are binned.
 }
 \usage{
 biplot.rsrPrincomp(x, choices = 1L:2L, label = NULL, label.nm = NULL, numBreaksX = 100, numBreaksY = 100, expand = 1, scale = 1, pc.biplot = FALSE, arrow.len = 0.1, alpha = 1, main = NULL, xlab, ylab, xlim, ylim, ...)
@@ -13,25 +13,24 @@ biplot.rsrPrincomp(x, choices = 1L:2L, label = NULL, label.nm = NULL, numBreaksX
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
-%%     ~~Describe \code{x} here~~
+  rsrPrincomp object.
 }
   \item{choices}{
-%%     ~~Describe \code{choices} here~~
+choices of components to plot.
 }
   \item{label}{
-%%     ~~Describe \code{label} here~~
+XDF file where the labels are stored.
 }
   \item{label.nm}{
-%%     ~~Describe \code{label.nm} here~~
-}
-  \item{numBreaksX}{
-%%     ~~Describe \code{numBreaksX} here~~
+Name of the variable for the label. 
+}  \item{numBreaksX}{
+Bin breaks for x.
 }
   \item{numBreaksY}{
-%%     ~~Describe \code{numBreaksY} here~~
+Bin breaks for y.
 }
   \item{expand}{
-%%     ~~Describe \code{expand} here~~
+An expansion factor to apply when plotting the second set of points relative to the first. This can be used to tweak the scaling of the two sets to a physically comparable scale.
 }
   \item{scale}{
 %%     ~~Describe \code{scale} here~~
@@ -40,28 +39,28 @@ biplot.rsrPrincomp(x, choices = 1L:2L, label = NULL, label.nm = NULL, numBreaksX
 %%     ~~Describe \code{pc.biplot} here~~
 }
   \item{arrow.len}{
-%%     ~~Describe \code{arrow.len} here~~
+The length of the arrow heads on the axes plotted in var.axes is true. The arrow head can be suppressed by arrow.len = 0.
 }
-  \item{alpha}{
-%%     ~~Describe \code{alpha} here~~
+\item{alpha}{
+Alpha level for the points in the plot
 }
   \item{main}{
-%%     ~~Describe \code{main} here~~
+Main title.
 }
   \item{xlab}{
-%%     ~~Describe \code{xlab} here~~
+Title of x axis.
 }
   \item{ylab}{
-%%     ~~Describe \code{ylab} here~~
+Titile of y axis
 }
   \item{xlim}{
-%%     ~~Describe \code{xlim} here~~
+Limit of x axis.
 }
   \item{ylim}{
-%%     ~~Describe \code{ylim} here~~
+Limit of y axis.
 }
   \item{\dots}{
-%%     ~~Describe \code{\dots} here~~
+Other options to be passed to rsrGridMap option.
 }
 }
 \details{
@@ -90,6 +89,21 @@ Masanao Yajima \email{yajima@stat.ucla.edu}
     \code{\link[stats]{biplot}}
 }
 \examples{
+# XDF
+inFile  <- "inData.xdf"
+outFile <- "outData.xdf"
+
+# dataset
+dataset <- iris[ ,1:4]
+form    <- ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width
+
+# conver the dataset to xdf file
+rxDataFrameToXdf( iris, inFile, overwrite = TRUE )
+
+# Fitting Principal Component Analsys Model using stats::princomp
+pc.fit <- rsrPrincomp( form, inFile = inFile, outFile=outFile, score = TRUE, overwrite = TRUE )
+
+biplot( pc.fit, label=inFile, label.nm="Species" )
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

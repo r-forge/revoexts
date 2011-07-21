@@ -82,10 +82,10 @@ dataset <- iris[ ,1:4]
 form    <- ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width
 
 # conver the dataset to xdf file
-rxDataFrameToXdf( cbind(dataset,label), inFile, overwrite = TRUE )
+rxDataFrameToXdf( dataset, inFile, overwrite = TRUE )
 
 # Fitting Principal Component Analsys Model using stats::princomp
-pc.fit <- rsrPrincomp( form, inFile = outFile, outFile=outFile, score = TRUE, overwrite = TRUE )
+pc.fit <- rsrPrincomp( form, inFile = inFile, outFile=outFile, score = TRUE, overwrite = TRUE )
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
