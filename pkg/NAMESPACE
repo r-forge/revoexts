@@ -1,0 +1,50 @@
+
+
+importFrom(stats,
+      "factanal",
+      "princomp"
+)
+
+importMethodsFrom(stats, 
+        "print", "summary" ")
+
+importMethodsFrom(graphics, 
+         "pairs")
+
+exportClasses(
+              "rsrFactanal",
+              "rsrPrincomp",
+              "rsrBinnedCount"
+              )
+
+exportMethods(
+              "print",
+              "summary",
+              "scores",
+              "loadings",
+              "scoreplot",
+              "biplot",
+              "pairs"
+              )
+
+export(
+        "rsrFactanal",
+        "factanal.rxCovCor",
+        "summary.rsrFactanal",
+        "print.rsrFactanal",
+        "scores.rsrFactanal",
+        "loadings.rsrFactanal",
+        "scoreplot.rsrFactanal",
+        "rsrPrincomp",
+        "princomp.rxCovCor",
+        "summary.rsrPrincomp",
+        "predict.rsrPrincomp",
+        "print.rsrPrincomp",
+        "loadings.rsrPrincomp",
+        "plot.rsrPrincomp",
+        "scores.rsrPrincomp",
+        "biplot.rsrPrincomp",
+        "pairs.loadings"
+)
+
+
