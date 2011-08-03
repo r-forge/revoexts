@@ -74,19 +74,19 @@ rsrFactanal <- function( formula,
 }
 
 # print 
-print.rsrFactanal <- function( x ){
+print.rsrFactanal <- function( x, ... ){
     if( inherits( x, "rsrFactanal" ) ){
-        print( x$fit )
+        print( x$fit, ... )
     } else {
-        print( x )
+        print( x, ... )
     }
 }
 # summary
-summary.rsrFactanal <- function( x ){
-    if( inherits( x, "rsrFactanal" ) ){
-        summary( x$fit )
+summary.rsrFactanal <- function( object, ... ){
+    if( inherits( object, "rsrFactanal" ) ){
+        summary( object$fit )
     } else {
-        summary( x )
+        summary( object )
     }
 }
 # scores
@@ -167,7 +167,7 @@ function( x, choices = 1L:2L, label = NULL, label.nm, alpha = 1,
 rsrFactorPlot<-function( x, factorName = "Factor1", ... ){
     if( inherits( x, "rsrFactanal" ) ){
         if( is.null( x$scores ) ){
-            stpt("Factor score is not calculated.")
+            stop("Factor score is not calculated.")
         }
         idx <- 1:x$fit$n.obs
         rxLinePlot( formula( paste( factorName, " ~ idx" ) ), 

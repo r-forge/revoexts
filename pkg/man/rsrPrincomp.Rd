@@ -5,6 +5,7 @@
 \alias{plot.rsrPrincomp}
 \alias{scores.rsrPrincomp}
 \alias{loadings.rsrPrincomp}
+\alias{predict.rsrPrincomp}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Principal Component Analysis for xdf object
@@ -39,12 +40,12 @@ number of blocks to read for each chunk of data read from the data source.
 }
   \item{reportProgress}{
 integer value with options: 
-\begin{itemize}
-	\item 0: no progress is reported. 
-	\item 1: the number of processed rows is printed and updated. 
-	\item 2: rows processed and timings are reported. 
-	\item 3: rows processed and all timings are reported. 
-\end{itemize}
+\itemize{
+	\item{ 0 } { no progress is reported. }
+	\item{ 1 } {the number of processed rows is printed and updated. }
+	\item{ 2 } {rows processed and timings are reported. }
+	\item{ 3 } { rows processed and all timings are reported. }
+}
 
 }  \item{\dots}{
 Other options to be passed to princomp function.
@@ -73,16 +74,17 @@ Masanao Yajima \email{yajima@stat.ucla.edu}
     \code{\link[stats]{princomp}}
 }
 \examples{
+# conver the dataset to xdf file
+# rxDataFrameToXdf( iris, "inData.xdf", overwrite = TRUE )
+
 # XDF
-inFile  <- "inData.xdf"
-outFile <- "outData.xdf"
+dir     <- system.file( "data", package = "RevoExts" )
+inFile  <- file.path( dir, "inData.xdf" )
+outFile <- file.path( dir, "outData.xdf" )
 
 # dataset
-dataset <- iris[ ,1:4]
 form    <- ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width
 
-# conver the dataset to xdf file
-rxDataFrameToXdf( dataset, inFile, overwrite = TRUE )
 
 # Fitting Principal Component Analsys Model using stats::princomp
 pc.fit <- rsrPrincomp( form, inFile = inFile, outFile=outFile, score = TRUE, overwrite = TRUE )

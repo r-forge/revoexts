@@ -2,10 +2,10 @@
 \alias{rsrFactorPlot}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+Plot for factor scores
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Plots factor scores using rxLinePlot.
 }
 \usage{
 rsrFactorPlot(x, factorName = "Factor1", ...)
@@ -45,7 +45,7 @@ Masanao Yajima \email{yajima@stat.ucla.edu}
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-    \code{\link[stats]{rsrComponentPlot}}
+    \code{\link[RevoExts]{rsrComponentPlot}}
 }
 \examples{
 # Example
@@ -58,13 +58,13 @@ v6 <- c(1,1,1,2,1,3,3,3,4,3,1,1,1,2,1,6,5,4)
 
 dataset <- data.frame( cbind( v1, v2, v3, v4, v5, v6 ) )
 form   <- ~ v1 + v2 + v3 + v4 +v5 +v6
+# conver the dataset to xdf file
+rxDataFrameToXdf( dataset, "Data.xdf", overwrite = TRUE )
 
-# XDF file names 
-inFile  <- "inData.xdf"
-outFile <- "outData.xdf"
-
-# dataset
-rxDataFrameToXdf( dataset,  inFile, overwrite = TRUE )
+# XDF
+dir     <- system.file( "data", package = "RevoExts" )
+inFile  <- file.path( dir, "Data.xdf" )
+outFile <- file.path( dir, "outData.xdf" )
 
 # Principal Component Analsys ( stats::princomp )
 fa.fit  <- rsrFactanal( form, inFile = inFile, outFile = outFile, 

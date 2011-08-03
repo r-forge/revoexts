@@ -1,16 +1,15 @@
 
 
-importFrom(stats,
+importFrom( stats,
       "factanal",
       "princomp"
 )
 
-importMethodsFrom(stats, 
-        "print", "summary" ")
 
-importMethodsFrom(graphics, 
-         "pairs")
-
+importFrom( RColorBrewer,
+      "brewer.pal"
+)
+      
 exportClasses(
               "rsrFactanal",
               "rsrPrincomp",
@@ -35,6 +34,7 @@ export(
         "scores.rsrFactanal",
         "loadings.rsrFactanal",
         "scoreplot.rsrFactanal",
+        "rsrFactorPlot",
         "rsrPrincomp",
         "princomp.rxCovCor",
         "summary.rsrPrincomp",
@@ -44,7 +44,24 @@ export(
         "plot.rsrPrincomp",
         "scores.rsrPrincomp",
         "biplot.rsrPrincomp",
-        "pairs.loadings"
+        "pairs.loadings",
+        "rsrComponentPlot",
+        "rsrLoadingPlot"
 )
 
 
+S3method(princomp, rxCovCor)
+S3method(factanal, rxCovCor)
+S3method(print, rsrPrincomp)
+S3method(print, rsrFactanal)
+S3method(summary, rsrPrincomp)
+S3method(summary, rsrFactanal)
+S3method(scores, rsrPrincomp)
+S3method(scores, rsrFactanal)
+S3method(loadings, rsrPrincomp)
+S3method(loadings, rsrFactanal)
+S3method(biplot, rsrPrincomp)
+S3method(scoreplot, rsrFactanal)
+S3method(plot, rsrPrincomp)
+S3method(predict, rsrPrincomp)
+S3method(pairs, loadings)

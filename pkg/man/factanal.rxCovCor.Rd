@@ -26,18 +26,22 @@ character. "none" or the name of a function to be used to rotate the factors: it
 }
   \item{control}{
 A list of control values, 
-\begin{itemize}
-	\item nstart
-The number of starting values to be tried if start = NULL. Default 1. 
-	\item trace
-logical. Output tracing information? Default FALSE. 
-	\item lower
-The lower bound for uniquenesses during optimization. Should be > 0. Default 0.005. 
-	\item opt
-A list of control values to be passed to optim's control argument. 
-	\item rotate
-a list of additional arguments for the rotation function. 
-\end{itemize}
+\itemize{
+    \item{ nstart }{
+        The number of starting values to be tried if start = NULL. Default 1. 
+    }
+    \item { trace } {
+        logical. Output tracing information? Default FALSE. 
+    }
+    \item {lower}{
+        The lower bound for uniquenesses during optimization. Should be > 0. Default 0.005. 
+    }
+    \item{ opt}{
+        A list of control values to be passed to optim's control argument. 
+    }
+    \item{ rotate }{
+        A list of additional arguments for the rotation function. }
+    }
 }
   \item{\dots}{
 Other options to be passed to factanal function.
@@ -72,7 +76,7 @@ form   <- ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width
 # calculate covariance matrix
 allCov <- rxCovCor( form, data = iris, type = "Cov" )
 
-fit <- factanal.rxCovCor( allCov )
+fit <- factanal.rxCovCor( allCov, factors = 1 )
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

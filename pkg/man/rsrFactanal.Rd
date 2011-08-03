@@ -49,12 +49,12 @@ number of blocks to read for each chunk of data read from the data source.
 }
   \item{reportProgress}{
 integer value with options: 
-\begin{itemize}
-	\item 0: no progress is reported. 
-	\item 1: the number of processed rows is printed and updated. 
-	\item 2: rows processed and timings are reported. 
-	\item 3: rows processed and all timings are reported. 
-\end{itemize}
+\itemize{
+	\item{ 0 } { no progress is reported. }
+	\item{ 1 } {the number of processed rows is printed and updated. }
+	\item{ 2 } {rows processed and timings are reported. }
+	\item{ 3 } { rows processed and all timings are reported. }
+}
 }
   \item{\dots}{
 Other options to be passed to factanal
@@ -95,12 +95,13 @@ v6 <- c(1,1,1,2,1,3,3,3,4,3,1,1,1,2,1,6,5,4)
 dataset <- data.frame( cbind( v1, v2, v3, v4, v5, v6 ) )
 form   <- ~ v1 + v2 + v3 + v4 +v5 +v6
 
-# XDF file names 
-inFile  <- "inData.xdf"
-outFile <- "outData.xdf"
+# conver the dataset to xdf file
+rxDataFrameToXdf( dataset, "Data.xdf", overwrite = TRUE )
 
-# dataset
-rxDataFrameToXdf( dataset,  inFile, overwrite = TRUE )
+# XDF
+dir     <- system.file( "data", package = "RevoExts" )
+inFile  <- file.path( dir, "Data.xdf" )
+outFile <- file.path( dir, "outData.xdf" )
 
 # Principal Component Analsys ( stats::princomp )
 fa.fit  <- rsrFactanal( form, inFile = inFile, outFile = outFile, 

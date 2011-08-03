@@ -91,12 +91,13 @@ label <-c(1,1,1,1,1,2,2,2,2,2,3,3,3,3,3,4,4,4)
 dataset <- data.frame( cbind( v1, v2, v3, v4, v5, v6 ) )
 form   <- ~ v1 + v2 + v3 + v4 +v5 +v6
 
-# XDF file names 
-inFile  <- "inData.xdf"
-outFile <- "outData.xdf"
+# conver the dataset to xdf file
+rxDataFrameToXdf( dataset, "Data.xdf", overwrite = TRUE )
 
-# dataset
-rxDataFrameToXdf( cbind( dataset, label ),  inFile, overwrite = TRUE )
+# XDF
+dir     <- system.file( "data", package = "RevoExts" )
+inFile  <- file.path( dir, "Data.xdf" )
+outFile <- file.path( dir, "outData.xdf" )
 
 # Principal Component Analsys ( stats::princomp )
 fa.fit  <- rsrFactanal( form, inFile = inFile, outFile = outFile, 

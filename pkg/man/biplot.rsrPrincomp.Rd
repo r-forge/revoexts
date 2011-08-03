@@ -89,16 +89,16 @@ Masanao Yajima \email{yajima@stat.ucla.edu}
     \code{\link[stats]{biplot}}
 }
 \examples{
+# conver the dataset to xdf file
+# rxDataFrameToXdf( iris, "inData.xdf", overwrite = TRUE )
+
 # XDF
-inFile  <- "inData.xdf"
-outFile <- "outData.xdf"
+dir     <- system.file( "data", package = "RevoExts" )
+inFile  <- file.path( dir, "inData.xdf" )
+outFile <- file.path( dir, "outData.xdf" )
 
 # dataset
-dataset <- iris[ ,1:4]
 form    <- ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width
-
-# conver the dataset to xdf file
-rxDataFrameToXdf( iris, inFile, overwrite = TRUE )
 
 # Fitting Principal Component Analsys Model using stats::princomp
 pc.fit <- rsrPrincomp( form, inFile = inFile, outFile=outFile, score = TRUE, overwrite = TRUE )

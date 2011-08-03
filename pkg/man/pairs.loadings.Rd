@@ -8,12 +8,12 @@ Matrix scatter plot for loading matrix
 Produces bivariate scatter plot matrix for loading matrix with spceified columns.
 }
 \usage{
-pairs.loadings(loading, include = 1:3, col = "black", labels = NULL, compnames = NULL, ...)
+pairs.loadings(x, include = 1:3, col = "black", labels = NULL, compnames = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{loading}{
-%%     ~~Describe \code{loading} here~~
+  \item{x}{
+loading matrix
 }
   \item{include}{
 Columns of loading matrix to include in the plot
@@ -53,7 +53,7 @@ Masanao Yajima \email{yajima@stat.ucla.edu}
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-    \code{\link[stats]{pairs}}
+    \code{\link[graphics]{pairs}}
 }
 \examples{
 pc.fit <- princomp( iris[,1:4] )

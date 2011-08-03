@@ -6,7 +6,7 @@ Author: Jan deLeeuw <deleeuw@stat.ucla.edu>,
         Masanao Yajima <yajima@ucla.edu>,
         Lee Edlefsen <lee@revolutionanalytics.com>
 Maintainer: Lee Edlefsen <lee@revolutionanalytics.com>
-Depends: methods, R (>= 2.9.0), RColorBrewer, grid, arm
+Depends: methods, R (>= 2.12.0), RColorBrewer, grid, arm, RevoScaleR
 Description: R functions for xdf files.
 URL: http://cran.r-project.org/web/packages/??????
 License: GPL (>= 2)

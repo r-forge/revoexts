@@ -69,20 +69,20 @@ rsrPrincomp <- function( formula,
 }
 
 # print 
-print.rsrPrincomp   <- function( x ){
+print.rsrPrincomp   <- function( x, ... ){
     if( inherits( x, "rsrPrincomp" ) ){
-        print( x$fit )
+        print( x$fit, ... )
     } else {
-        print( x )
+        print( x, ... )
     }
 }
 
 # summary
-summary.rsrPrincomp <- function( x ){
-    if( inherits( x, "rsrPrincomp" ) ){
-        summary( x$fit )
+summary.rsrPrincomp <- function( object, ... ){
+    if( inherits( object, "rsrPrincomp" ) ){
+        summary( object$fit )
     } else {
-        summary( x )
+        summary( object )
     }
 }
 scores <- function (x, ...){ 
@@ -120,7 +120,7 @@ loadings.rsrPrincomp<- function( x ){
 rsrComponentPlot<-function( x, componentName = "Comp.1", ... ){ #,,... ){
     if( inherits( x, "rsrPrincomp" ) ){
         if( is.null( x$scores ) ){
-            stpt("Principal Component score is not calculated.")
+            stop( "Principal Component score is not calculated." )
         }
         possibleNames <- rxGetVarNames( x$scores )
         if( !all( componentName %in% possibleNames ) ){
@@ -133,7 +133,8 @@ rsrComponentPlot<-function( x, componentName = "Comp.1", ... ){ #,,... ){
     }
 }
 # plot 
-biplot.rsrPrincomp    <- function( x, choices = 1L:2L, label = NULL, label.nm = NULL, 
+biplot.rsrPrincomp    <- function( x, choices = 1L:2L, 
+                                   label = NULL, label.nm = NULL, 
                                    numBreaksX = 100, numBreaksY = 100, 
                                    expand = 1, scale = 1, pc.biplot = FALSE, 
                                    arrow.len = 0.1, alpha = 1,
